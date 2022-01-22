@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
-cc main.m -o MacRez.app/Contents/MacOS/MacRez -framework Cocoa
+
+cc MacRez.c -o MacRez -framework CoreGraphics
 echo Build succeeded.
-MacRez.app/Contents/MacOS/MacRez
+
