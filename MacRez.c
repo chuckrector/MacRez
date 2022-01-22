@@ -1,3 +1,8 @@
+/*
+https://gist.github.com/bellbind/27220148ea752335259dfce63f43bd5d
+https://stackoverflow.com/questions/53595111/how-to-get-the-physical-display-resolution-on-macos
+*/
+
 #include <stdio.h>
 #include <CoreGraphics/CGDisplayConfiguration.h>
 
