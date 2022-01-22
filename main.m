@@ -2,34 +2,29 @@
 
 int main(int argc, char **argv)
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    [NSApplication sharedApplication];
-    NSUInteger windowStyle = NSTitledWindowMask | NSClosableWindowMask | NSResizableWindowMask;
-    NSRect windowRect = NSMakeRect(100, 100, 400, 400);
-    NSWindow * window = [[NSWindow alloc] initWithContentRect:windowRect
-                                          styleMask:windowStyle
-                                          backing:NSBackingStoreBuffered
-                                          defer:NO];
-    [window autorelease];
-    NSWindowController * windowController = [[NSWindowController alloc] initWithWindow:window];
-    [windowController autorelease];
-    NSTextView * textView = [[NSTextView alloc] initWithFrame:windowRect];
-    [textView autorelease];
-    [window setContentView:textView];
-    NSArray *screenArray = [NSScreen screens];
+    NSLog(@"What I am trying to get:");
+    NSLog(@"3072 x 1920\n\n");
+
+    NSLog(@"What I am actually getting:");
+
+    NSArray *screens = [NSScreen screens];
     NSScreen *mainScreen = [NSScreen mainScreen];
-    unsigned screenCount = [screenArray count];
-    unsigned index  = 0;
-    for (index; index < screenCount; index++)
+    for (int i = 0; i < [screens count]; ++i)
     {
-        NSScreen *screen = [screenArray objectAtIndex: index];
-        NSRect screenRect = [screen visibleFrame];
-        NSString *mString = ((mainScreen == screen) ? @"Main" : @"not-main");
-        NSString *res = [NSString stringWithFormat:@"Screen #%d (%@) Frame: %@", index, mString, NSStringFromRect(screenRect)];
-        [textView insertText:res];
+        NSScreen *screen = [screens objectAtIndex: i];
+        NSLog(@"Screen #%d", i);
+
+        NSRect visibleFrame = [screen visibleFrame];
+        NSLog(@"NSStringFromRect %@", NSStringFromRect(visibleFrame));
+        NSLog(@"convertRectToBacking %@", NSStringFromRect([screen convertRectToBacking:visibleFrame]));
+
+        NSDictionary *description = [screen deviceDescription];
+        NSSize deviceSize = [[description objectForKey:NSDeviceSize] sizeValue];
+        CGSize screenSize = CGDisplayScreenSize(
+            [[description objectForKey:@"NSScreenNumber"] unsignedIntValue]);
+        NSLog(@"NSDeviceSize %f x %f", deviceSize.width, deviceSize.height);
+        NSLog(@"CGDisplayScreenSize %f x %f", screenSize.width, screenSize.height);
     }
-    [window orderFrontRegardless];
-    [NSApp run];
-    [pool drain];
+
     return 0;
 }
